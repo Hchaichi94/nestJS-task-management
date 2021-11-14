@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/user.entity';
 import { CreatTaskDTO } from './dto/create-task.dto';
 import { GetTasksFilterDTO } from './dto/get-tasks.dto';
 import { updateTaskDTO } from './dto/update-task.dto';
-import { TaskStatus } from './task-status.enum';
 import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 
@@ -18,8 +19,8 @@ export class TasksController {
   }
 
   @Post()
-  createTask(@Body() creatTaskDTO: CreatTaskDTO): Promise<Task> {
-    return this.tasksService.createTask(creatTaskDTO)
+  createTask(@Body() creatTaskDTO: CreatTaskDTO, @GetUser() user: User): Promise<Task> {
+    return this.tasksService.createTask(creatTaskDTO, user)
   }
 
   @Delete('/:id')
@@ -34,7 +35,7 @@ export class TasksController {
   }
 
   @Get()
-  getTasks(@Query() filterDTO: GetTasksFilterDTO): Promise<Task[]> {
-    return this.tasksService.getTasks(filterDTO);
+  getTasks(@Query() filterDTO: GetTasksFilterDTO, @GetUser() user: User): Promise<Task[]> {
+    return this.tasksService.getTasks(filterDTO, user);
   }
 }
