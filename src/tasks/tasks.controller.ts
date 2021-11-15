@@ -13,8 +13,8 @@ import { TasksService } from './tasks.service';
 @UseGuards(AuthGuard())
 export class TasksController {
   constructor(private tasksService: TasksService, private configService: ConfigService) {
-
-    console.log(configService);
+    const dbUser = this.configService.get<string>('DB_DATABASE');
+    console.log(dbUser);
   }
   private logger = new Logger('TasksController')
 
